@@ -1,0 +1,16 @@
+package zad1;
+
+import java.net.ServerSocket;
+
+public class MainServer extends Thread
+{
+	final int serverPort = 5000;
+
+	@Override
+	public void run() 
+	{
+		ServerSocket welcomeSocket;
+		super.run();
+	}
+
+}

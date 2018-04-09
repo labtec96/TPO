@@ -1,0 +1,12 @@
+package zad1;
+
+public class Klient extends Thread
+{
+
+	@Override
+	public void run()
+	{
+		(new Thread(new Klient())).start();
+	}
+	
+}

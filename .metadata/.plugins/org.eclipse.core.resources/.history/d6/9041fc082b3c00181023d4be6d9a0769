@@ -1,0 +1,20 @@
+package zad1;
+
+import javax.swing.JFrame;
+
+public class Klient extends Thread
+{
+
+	public Klient(String haslo, String kodKraju, int port)
+	{
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void run()
+	{
+		MainGui ramka = new MainGui();
+		ramka.setVisible(true);
+	}
+
+}

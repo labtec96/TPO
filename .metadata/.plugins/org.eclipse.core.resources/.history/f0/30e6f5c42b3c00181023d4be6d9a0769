@@ -1,0 +1,23 @@
+package zad1;
+
+import javax.swing.JFrame;
+
+public class Klient extends Thread
+{
+	String haslo;
+	String kodKraju;
+	int port;
+	public Klient(String haslo, String kodKraju, int port)
+	{
+		this.haslo = haslo;
+		this.kodKraju = kodKraju;
+		this.port = port;
+	}
+
+	@Override
+	public void run()
+	{
+
+	}
+
+}

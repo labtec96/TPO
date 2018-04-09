@@ -1,0 +1,6 @@
+package zad1;
+
+public class MainServer extends Thread
+{
+	final int serverPort = 5000;
+}

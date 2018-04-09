@@ -1,0 +1,14 @@
+package zad1;
+
+import javax.swing.JFrame;
+
+public class Klient extends Thread
+{
+
+	@Override
+	public void run()
+	{
+		JFrame ramka = new MainGui();
+	}
+	
+}

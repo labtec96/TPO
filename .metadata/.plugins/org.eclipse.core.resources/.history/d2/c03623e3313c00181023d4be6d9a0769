@@ -1,0 +1,49 @@
+package zad1;
+
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class MainServer extends Thread
+{
+	final int serverPort = 5000;
+	ServerSocket welcomeSocket;
+
+	@Override
+	public void run()
+	{
+		try
+		{
+			System.out.println("Serwer Wystartowal");
+			welcomeSocket = new ServerSocket(serverPort);
+			while (true)
+			{
+				Socket socketFromClient = welcomeSocket.accept();
+				System.out.println("Polaczono do Serwera");
+				InputStream sis = socketFromClient.getInputStream();
+        		OutputStream sos = socketFromClient.getOutputStream();
+        		
+        		InputStreamReader isr = new InputStreamReader(sis);
+        		OutputStreamWriter osw = new OutputStreamWriter(sos);
+        		
+        		BufferedReader br = new BufferedReader(isr);
+        		BufferedWriter bw = new BufferedWriter(osw);
+        		String haslo = br.readLine();
+        		System.out.println(haslo);
+        		String kodKraju = br.readLine();
+        		System.out.println(kodKraju);
+        		int port = Integer.parseInt(br.readLine());
+        		System.out.println(port);
+        		socketFromClient.close();
+        		Socket socketToLanguageServer = new Socket(adresIp, serverPort);
+        		
+   			}
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		super.run();
+	}
+
+}

@@ -1,0 +1,33 @@
+package zad1;
+
+import javax.swing.JFrame;
+
+public class Klient extends Thread
+{
+	final int serverPort = 5000;
+	String haslo;
+	String kodKraju;
+	int port;
+	public Klient(String haslo, String kodKraju, int port)
+	{
+		this.haslo = haslo;
+		this.kodKraju = kodKraju;
+		this.port = port;
+	}
+
+	@Override
+	public void run()
+	{
+		Socket clientSocket = new Socket(wprowadzajacyIp, serverPort);
+		InputStream sis = clientSocket.getInputStream();
+		OutputStream sos = clientSocket.getOutputStream();
+
+		InputStreamReader isr = new InputStreamReader(sis);
+		OutputStreamWriter osw = new OutputStreamWriter(sos);
+
+		BufferedReader br = new BufferedReader(isr);
+		BufferedWriter bw = new BufferedWriter(osw);
+
+	}
+
+}

@@ -1,0 +1,30 @@
+package zad1;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class MainServer extends Thread
+{
+	final int serverPort = 5000;
+	ServerSocket welcomeSocket;
+
+	@Override
+	public void run()
+	{
+		try
+		{
+			welcomeSocket = new ServerSocket(serverPort);
+			while (true)
+			{
+				Socket clientSocket = welcomeSocket.accept();
+			}
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		super.run();
+	}
+
+}
