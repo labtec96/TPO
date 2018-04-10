@@ -1,0 +1,78 @@
+package zad1;
+
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.io.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class Klient extends Thread
+{
+	
+	String adresIp;
+	final int serverPort = 5000;
+	String haslo;
+	String kodKraju;
+	int port;
+	JLabel tlumaczenie;
+	
+	public Klient(String haslo, String kodKraju, int port, JLabel tlumaczenie)
+	{
+		this.tlumaczenie = tlumaczenie;
+		this.haslo = haslo;
+		this.kodKraju = kodKraju;
+		this.port = port;
+		try
+		{
+			 adresIp = InetAddress.getLocalHost().getHostAddress();
+		}catch(
+		IOException ie)
+		{
+			System.out.println("Problem z pobraniem adresu IP");
+		}
+	}
+
+	@Override
+	public void run()
+	{
+		Socket clientSocket;
+		try
+		{
+			clientSocket = new Socket(adresIp, serverPort);
+			
+			OutputStream sos = clientSocket.getOutputStream();
+			OutputStreamWriter osw = new OutputStreamWriter(sos);
+			BufferedWriter bw = new BufferedWriter(osw);
+			
+			bw.write(haslo);
+			bw.newLine();
+			bw.flush();
+			bw.write(kodKraju);
+			bw.newLine();
+			bw.flush();
+			bw.write(Integer.toString(port));
+			bw.newLine();
+			bw.flush();
+			clientSocket.close();
+			ServerSocket welcomeSocket =  new ServerSocket(port);
+			while (true)
+			{
+				Socket clientSocketGetRequest = welcomeSocket.accept();
+				System.out.println("Otrzymuje odpowiedz ");
+				InputStream sis = clientSocketGetRequest.getInputStream();
+				InputStreamReader isr = new InputStreamReader(sis);
+				BufferedReader br = new BufferedReader(isr);
+				String hasloPrzetlumaczone = br.readLine();
+				tlumaczenie.setText(hasloPrzetlumaczone);
+				clientSocketGetRequest.close();
+			}
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}

@@ -1,0 +1,77 @@
+package zad1;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.HashMap;
+
+public class ServerDictionary extends Thread
+{
+	HashMap<String, String> slownik;
+	String symbol;
+	Integer port;
+	ServerSocket welcomeSocket;
+
+	public ServerDictionary(String symbol, Integer port)
+	{
+		this.symbol = symbol;
+		this.port = port;
+		slownik = readToMap();
+	}
+
+	private HashMap<String, String> readToMap()
+	{
+		String nazwaPliku = System.getProperty("user.dir") + "\\dic\\" + symbol + ".txt";
+		try (BufferedReader br = new BufferedReader(new FileReader(nazwaPliku)))
+		{
+			String currentLine;
+			while ((currentLine = br.readLine()) != null)
+			{
+				System.out.println(currentLine);
+			}
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void run()
+	{
+		try
+		{
+			welcomeSocket = new ServerSocket(port);
+			while (true)
+			{
+				Socket universalSocket = welcomeSocket.accept();
+				System.out.println("Polaczono do Serwera Jezykowego");
+
+				InputStream sis = universalSocket.getInputStream();
+				InputStreamReader isr = new InputStreamReader(sis);
+				BufferedReader br = new BufferedReader(isr);
+
+				OutputStream sos = universalSocket.getOutputStream();
+				OutputStreamWriter osw = new OutputStreamWriter(sos);
+				BufferedWriter bw = new BufferedWriter(osw);
+
+				String haslo = br.readLine();
+				System.out.println(haslo);
+				String kodKraju = br.readLine();
+				System.out.println(kodKraju);
+				int port = Integer.parseInt(br.readLine());
+				System.out.println(port);
+			}
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+}

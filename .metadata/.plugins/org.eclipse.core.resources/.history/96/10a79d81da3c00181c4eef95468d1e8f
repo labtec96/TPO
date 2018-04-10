@@ -1,0 +1,14 @@
+package zad1;
+
+public class ServerDictionary extends Thread
+{
+
+	String symbol;
+	Integer port;
+	public ServerDictionary(String symbol, Integer port)
+	{
+		this.symbol = symbol;
+		this.port = port;
+	}
+	
+}

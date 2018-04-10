@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="java.lang.Thread"/>
 <fullyQualifiedTypeName name="java.net.ServerSocket"/>
-<fullyQualifiedTypeName name="java.net.Socket"/>
 <fullyQualifiedTypeName name="org.omg.CORBA.portable.OutputStream"/>
 <fullyQualifiedTypeName name="java.io.OutputStream"/>
 <fullyQualifiedTypeName name="java.io.InputStream"/>
@@ -10,4 +8,15 @@
 <fullyQualifiedTypeName name="java.io.BufferedReader"/>
 <fullyQualifiedTypeName name="java.io.OutputStreamWriter"/>
 <fullyQualifiedTypeName name="java.io.BufferedWriter"/>
+<fullyQualifiedTypeName name="java.lang.Thread"/>
+<fullyQualifiedTypeName name="zad1.MainServer"/>
+<fullyQualifiedTypeName name="javax.swing.JFrame"/>
+<fullyQualifiedTypeName name="zad1.Klient"/>
+<fullyQualifiedTypeName name="zad1.MainGui"/>
+<fullyQualifiedTypeName name="java.lang.NumberFormatException"/>
+<fullyQualifiedTypeName name="java.net.Socket"/>
+<fullyQualifiedTypeName name="java.net.InetAddress"/>
+<fullyQualifiedTypeName name="java.lang.String"/>
+<fullyQualifiedTypeName name="java.lang.Integer"/>
+<fullyQualifiedTypeName name="java.lang.Exception"/>
 </qualifiedTypeNameHistroy>

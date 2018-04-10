@@ -4,12 +4,19 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class MainServer extends Thread
 {
 	final int serverPort = 5000;
 	ServerSocket welcomeSocket;
 	String adresIp;
+	HashMap<String, Integer> mapaPortowSlownikow;
+	public MainServer(HashMap<String, Integer>  mapaPortowSlownikow)
+	{
+		this.mapaPortowSlownikow = mapaPortowSlownikow;
+	}
+	@SuppressWarnings("resource")
 	@Override
 	public void run()
 	{
@@ -39,8 +46,16 @@ public class MainServer extends Thread
         		System.out.println(kodKraju);
         		int port = Integer.parseInt(br.readLine());
         		System.out.println(port);
+        		
         		universalSocket.close();
-        		universalSocket = new Socket(adresIp, serverPort);
+        		
+        		int nrPortuSerweraJezykowego;
+        		if ( mapaPortowSlownikow.get(kodKraju) == null)
+        			throw new Exception();
+        		else
+        			nrPortuSerweraJezykowego = mapaPortowSlownikow.get(kodKraju);
+        		System.out.println(nrPortuSerweraJezykowego);
+        		universalSocket = new Socket(adresIp, nrPortuSerweraJezykowego);
         		
         		OutputStream sos = universalSocket.getOutputStream();
         		OutputStreamWriter osw = new OutputStreamWriter(sos);
@@ -55,11 +70,15 @@ public class MainServer extends Thread
     			bw.write(Integer.toString(port));
     			bw.newLine();
     			bw.flush();
+    			universalSocket.close();
    			}
 		} catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (Exception e)
+		{
+			System.out.println("Podales zly kod jezykowy");
 		}
 		super.run();
 	}

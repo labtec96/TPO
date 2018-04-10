@@ -1,9 +1,10 @@
 package zad1;
 
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.*;
-import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 public class Klient extends Thread
 {
@@ -13,9 +14,11 @@ public class Klient extends Thread
 	String haslo;
 	String kodKraju;
 	int port;
-
-	public Klient(String haslo, String kodKraju, int port)
+	JLabel tlumaczenie;
+	
+	public Klient(String haslo, String kodKraju, int port, JLabel tlumaczenie)
 	{
+		this.tlumaczenie = tlumaczenie;
 		this.haslo = haslo;
 		this.kodKraju = kodKraju;
 		this.port = port;
@@ -36,14 +39,11 @@ public class Klient extends Thread
 		try
 		{
 			clientSocket = new Socket(adresIp, serverPort);
-			InputStream sis = clientSocket.getInputStream();
+			
 			OutputStream sos = clientSocket.getOutputStream();
-
-			InputStreamReader isr = new InputStreamReader(sis);
 			OutputStreamWriter osw = new OutputStreamWriter(sos);
-
-			BufferedReader br = new BufferedReader(isr);
 			BufferedWriter bw = new BufferedWriter(osw);
+			
 			bw.write(haslo);
 			bw.newLine();
 			bw.flush();
@@ -53,6 +53,22 @@ public class Klient extends Thread
 			bw.write(Integer.toString(port));
 			bw.newLine();
 			bw.flush();
+			clientSocket.close();
+			ServerSocket welcomeSocket =  new ServerSocket(port);
+			while (true)
+			{
+				Socket clientSocketGetRequest = welcomeSocket.accept();
+				System.out.println("Polaczylem sie z serwerem czekam na odpowiedz ");
+				InputStream sis = clientSocketGetRequest.getInputStream();
+				InputStreamReader isr = new InputStreamReader(sis);
+				BufferedReader br = new BufferedReader(isr);
+				String hasloPrzetlumaczone = br.readLine();
+				System.out.println("Otrzymalem odpowiedz " + hasloPrzetlumaczone);
+				tlumaczenie.setText(hasloPrzetlumaczone);
+				clientSocketGetRequest.close();
+				break;
+			}
+			welcomeSocket.close();
 		} catch (IOException e)
 		{
 			// TODO Auto-generated catch block

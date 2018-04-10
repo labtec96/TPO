@@ -1,0 +1,13 @@
+package zad1;
+
+public class Main
+{
+	public static void main(String[] args)
+	{
+		  LoadDictionary loadDictionary = new LoadDictionary();
+		  loadDictionary.load();
+		  (new Thread(new MainServer())).start();
+		  MainGui ramka = new MainGui();
+		  ramka.setVisible(true);
+	}
+}

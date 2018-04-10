@@ -1,0 +1,11 @@
+package zad1;
+
+public class ServerDictionary
+{
+
+	public ServerDictionary(String key, Integer value)
+	{
+		// TODO Auto-generated constructor stub
+	}
+
+}
