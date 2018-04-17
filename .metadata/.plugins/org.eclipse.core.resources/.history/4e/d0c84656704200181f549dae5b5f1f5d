@@ -1,0 +1,14 @@
+package StartServers;
+
+import java.util.HashMap;
+
+public class Main {
+
+	public static void main(String[] args) 
+	{
+		LoadDictionary loadDictionary = new LoadDictionary();
+		loadDictionary.load();
+		(new Thread(new MainServer(LoadDictionary.mapa))).start();
+	}
+
+}

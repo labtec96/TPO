@@ -2,14 +2,15 @@ package zad1;
 
 import java.util.HashMap;
 
+import StartServers.LoadDictionary;
+import StartServers.MainServer;
+import StartServers.ServerDictionary;
+
 public class Main
 {
 	public static void main(String[] args)
 	{
-		  LoadDictionary loadDictionary = new LoadDictionary();
-		  HashMap<String, Integer> mapaPortowSlownikow =  loadDictionary.load();
-		  (new Thread(new MainServer(mapaPortowSlownikow))).start();
-		  MainGui ramka = new MainGui(mapaPortowSlownikow);
+		  MainGui ramka = new MainGui();
 		  ramka.setVisible(true);
 	}
 }

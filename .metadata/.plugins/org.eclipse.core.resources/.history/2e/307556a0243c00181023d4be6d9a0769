@@ -1,6 +1,0 @@
-package zad1;
-
-public class Klient extends Thread
-{
-
-}

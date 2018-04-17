@@ -8,25 +8,26 @@ import javax.swing.JLabel;
 
 public class Klient extends Thread
 {
-	
+
 	String adresIp;
 	final int serverPort = 5000;
 	String haslo;
 	String kodKraju;
 	int port;
 	JLabel tlumaczenie;
-	
-	public Klient(String haslo, String kodKraju, int port, JLabel tlumaczenie)
+	JLabel lblLanguage;
+
+	public Klient(String haslo, String kodKraju, int port, JLabel tlumaczenie, JLabel lblLanguage)
 	{
 		this.tlumaczenie = tlumaczenie;
 		this.haslo = haslo;
 		this.kodKraju = kodKraju;
 		this.port = port;
+		this.lblLanguage = lblLanguage;
 		try
 		{
-			 adresIp = InetAddress.getLocalHost().getHostAddress();
-		}catch(
-		IOException ie)
+			adresIp = InetAddress.getLocalHost().getHostAddress();
+		} catch (IOException ie)
 		{
 			System.out.println("Problem z pobraniem adresu IP");
 		}
@@ -39,11 +40,13 @@ public class Klient extends Thread
 		try
 		{
 			clientSocket = new Socket(adresIp, serverPort);
-			
+
 			OutputStream sos = clientSocket.getOutputStream();
 			OutputStreamWriter osw = new OutputStreamWriter(sos);
 			BufferedWriter bw = new BufferedWriter(osw);
-			
+			InputStream sis = clientSocket.getInputStream();
+			InputStreamReader isr = new InputStreamReader(sis);
+			BufferedReader br = new BufferedReader(isr);
 			bw.write(haslo);
 			bw.newLine();
 			bw.flush();
@@ -53,22 +56,41 @@ public class Klient extends Thread
 			bw.write(Integer.toString(port));
 			bw.newLine();
 			bw.flush();
-			clientSocket.close();
-			ServerSocket welcomeSocket =  new ServerSocket(port);
-			while (true)
+			String czyDobryKod = br.readLine();
+			if (czyDobryKod.equals("Nie"))
 			{
-				Socket clientSocketGetRequest = welcomeSocket.accept();
-				System.out.println("Polaczylem sie z serwerem czekam na odpowiedz ");
-				InputStream sis = clientSocketGetRequest.getInputStream();
-				InputStreamReader isr = new InputStreamReader(sis);
-				BufferedReader br = new BufferedReader(isr);
-				String hasloPrzetlumaczone = br.readLine();
-				System.out.println("Otrzymalem odpowiedz " + hasloPrzetlumaczone);
-				tlumaczenie.setText(hasloPrzetlumaczone);
-				clientSocketGetRequest.close();
-				break;
+				System.out.println("nie");
+				tlumaczenie.setText("Zly kod jezyka");
+				clientSocket.close();
+			} else
+			{
+				clientSocket.close();
+				ServerSocket welcomeSocket = new ServerSocket(port);
+				while (true)
+				{
+					Socket clientSocketGetRequest = welcomeSocket.accept();
+					sis = clientSocketGetRequest.getInputStream();
+					isr = new InputStreamReader(sis);
+					br = new BufferedReader(isr);
+					System.out.println("Polaczylem sie z serwerem czekam na odpowiedz ");
+					String serverString = br.readLine();
+					if (serverString == "Zly kod jezyka")
+					{
+						tlumaczenie.setText(serverString);
+						clientSocketGetRequest.close();
+						break;
+					} 
+					else
+					{
+						System.out.println("Otrzymalem odpowiedz " + serverString);
+						tlumaczenie.setText(serverString);
+						clientSocketGetRequest.close();
+						break;
+					}
+				}
+
+				welcomeSocket.close();
 			}
-			welcomeSocket.close();
 		} catch (IOException e)
 		{
 			// TODO Auto-generated catch block

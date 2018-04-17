@@ -10,6 +10,15 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,8 +38,9 @@ public class MainGui extends JFrame
 	private JLabel lblTlumaczenie;
 	private JLabel lblDostepneJezyki;
 	private JLabel lblLanguage;
+	private JButton btnNewButton;
 
-	public MainGui(HashMap<String, Integer> mapaPortowSlownikow)
+	public MainGui()
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 501, 158);
@@ -81,10 +91,45 @@ public class MainGui extends JFrame
 		lblTlumaczenie.setBounds(304, 15, 147, 14);
 		contentPane.add(lblTlumaczenie);
 		
+		btnNewButton = new JButton("Sprawdz");
+		btnNewButton.setBounds(340, 71, 89, 23);
+		contentPane.add(btnNewButton);
+		lblDostepneJezyki = new JLabel("Dostepne jezyki:");
+		lblDostepneJezyki.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblDostepneJezyki.setBounds(10, 92, 110, 14);
+		contentPane.add(lblDostepneJezyki);
+		
+		lblLanguage = new JLabel("");
+		lblLanguage.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblLanguage.setBounds(130, 93, 110, 14);
+		contentPane.add(lblLanguage);
+		
+		///RequestForLanguges
+		
+		try
+		{
+			Socket clientSocket = new Socket(InetAddress.getLocalHost().getHostAddress(), 5000);
+			OutputStream sos = clientSocket.getOutputStream();
+			OutputStreamWriter osw = new OutputStreamWriter(sos);
+			BufferedWriter bw = new BufferedWriter(osw);
+			
+			InputStream sis = clientSocket.getInputStream();
+			InputStreamReader isr = new InputStreamReader(sis);
+			BufferedReader br = new BufferedReader(isr);
+			
+			bw.write("requestForLanguage");
+			bw.newLine();
+			bw.flush();
+			String languge = br.readLine();
+			lblLanguage.setText(languge);
+			clientSocket.close();
+		} catch (IOException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		
-		
-		JButton btnNewButton = new JButton("Sprawdz");
 		btnNewButton.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent arg0)
@@ -97,7 +142,7 @@ public class MainGui extends JFrame
 					else
 					{
 						int port = Integer.parseInt(tfPort.getText());
-						(new Thread(new Klient(tfHaslo.getText(), tfKodKraju.getText(), port,lbvarlTlumaczenie))).start();
+						(new Thread(new Klient(tfHaslo.getText(), tfKodKraju.getText(), port,lbvarlTlumaczenie,lblLanguage))).start();
 					}
 				} catch (NumberFormatException e)
 				{
@@ -109,24 +154,6 @@ public class MainGui extends JFrame
 
 			}
 		});
-		btnNewButton.setBounds(340, 71, 89, 23);
-		contentPane.add(btnNewButton);
-		lblDostepneJezyki = new JLabel("Dostepne jezyki:");
-		lblDostepneJezyki.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblDostepneJezyki.setBounds(10, 92, 110, 14);
-		contentPane.add(lblDostepneJezyki);
-		
-		lblLanguage = new JLabel("");
-		List<String> listaSlownikow = new ArrayList<String>(mapaPortowSlownikow.keySet());
-		String setText ="";
-		for (String jezyk : listaSlownikow)
-		{
-			setText = setText + " " + jezyk;
-		}
-			lblLanguage.setText(setText);
-		lblLanguage.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblLanguage.setBounds(130, 93, 110, 14);
-		contentPane.add(lblLanguage);
 	}
 
 	public JTextField getTfHaslo()
